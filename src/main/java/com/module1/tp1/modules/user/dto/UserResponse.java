@@ -1,13 +1,13 @@
 package com.module1.tp1.modules.user.dto;
 
 public class UserResponse {
-  private Integer id;
+  private Long id;
   private String username;
   private String firstName;
   private String lastName;
   private Integer phoneNumber;
 
-  public UserResponse(Integer id, String username, String firstName, String lastName, Integer phoneNumber) {
+  public UserResponse(Long id, String username, String firstName, String lastName, Integer phoneNumber) {
     this.id = id;
     this.username = username;
     this.firstName = firstName;
@@ -15,11 +15,11 @@ public class UserResponse {
     this.phoneNumber = phoneNumber;
   }
 
-  public Integer getId() {
+  public Long getId() {
     return id;
   }
 
-  public void setId(Integer id) {
+  public void setId(Long id) {
     this.id = id;
   }
 
