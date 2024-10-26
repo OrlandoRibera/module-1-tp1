@@ -3,7 +3,6 @@ package com.module1.tp1.modules.auth;
 import com.module1.tp1.modules.auth.dto.LoginRequest;
 import com.module1.tp1.modules.user.User;
 import com.module1.tp1.modules.user.UserService;
-import com.module1.tp1.modules.user.dto.UserResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,25 +18,22 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
-
   @Autowired
-  UserService userService;
-
-//  @PostMapping("/login")
-//  public ResponseEntity<UserResponse> login(@Valid @RequestBody LoginRequest loginRequest) {
-//    String username = loginRequest.getUsername();
-//    String password = loginRequest.getPassword();
-//
-//    User user = userService.getUserByUsername();
-//
-//    return new ResponseEntity<UserResponse>(userService, HttpStatus.ACCEPTED);
-//  }
+  private UserService userService;
 
   @PostMapping("/login")
-  public String login(@Valid @RequestBody LoginRequest loginRequest) {
-    String username = loginRequest.getUsername();
-    String password = loginRequest.getPassword();
+  public ResponseEntity<String> login(@Valid @RequestBody LoginRequest loginRequest) {
+    String username = loginRequest.username();
+    String password = loginRequest.password();
 
-    return "OK";
+    User user = userService.getUserByUsername(username);
+    if (user == null) {
+      return new ResponseEntity<>("Username not found.", HttpStatus.NOT_FOUND);
+    }
+
+    if (userService.isPasswordCorrect(password, user.getPassword())) {
+      return new ResponseEntity<>("User logged successfully.", HttpStatus.ACCEPTED);
+    }
+    return new ResponseEntity<>("Username or password is incorrect.", HttpStatus.ACCEPTED);
   }
 }

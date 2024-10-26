@@ -1,31 +1,29 @@
 package com.module1.tp1.modules.user;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.Builder;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
 
 @Entity
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Getter
 @Setter
+@Table(name = "users")
 public class User {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
+  @NotNull(message = "username is required.")
+  @Column(unique = true)
   private String username;
+  @NotNull(message = "password is required.")
   private String password;
+  @NotNull(message = "firstName is required.")
   private String firstName;
+  @NotNull(message = "lastName is required.")
   private String lastName;
   private Integer phoneNumber;
 }

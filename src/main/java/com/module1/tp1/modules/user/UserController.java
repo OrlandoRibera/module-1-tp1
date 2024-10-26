@@ -4,12 +4,8 @@ import com.module1.tp1.modules.user.dto.UserResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * This controller will manage the user registration
@@ -20,9 +16,21 @@ public class UserController {
   @Autowired
   private UserService userService;
 
-  @PostMapping(path = "/create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<User> create(@Valid @RequestBody User user) {
-    User userCreated = userService.createUser(user);
-    return new ResponseEntity<>(userCreated, HttpStatus.CREATED);
+
+  @PostMapping("/create")
+  public ResponseEntity<UserResponse> create(@Valid @RequestBody User user) {
+    User createdUser = userService.createUser(user);
+    return ResponseEntity.status(HttpStatus.CREATED).body(userService.toUserResponse(createdUser));
+  }
+
+  @GetMapping("/getAll")
+  public Iterable<User> getAll() {
+    return userService.getAll();
+  }
+
+  @ExceptionHandler(RuntimeException.class)
+  @ResponseStatus(HttpStatus.CONFLICT)
+  public String handleDuplicateUsernameException(RuntimeException e) {
+    return e.getMessage();
   }
 }
